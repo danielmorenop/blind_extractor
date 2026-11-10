@@ -23,5 +23,4 @@ By default, the script is configured to extract the database name (`database()`)
 # Uncomment or modify the query you want to extract:
 # search = "select group_concat(table_name) from information_schema.tables where table_schema='lab_db'"
 search = "database()"
-# search = "user()"
 ```
